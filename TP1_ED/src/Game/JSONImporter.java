@@ -314,7 +314,7 @@ public class JSONImporter {
 
     public Map<Division> generateMap() {
 
-        Map<Division> tmpMap = new Map<>();
+        Map<Division> tmpMap = new Map<Division>();
 
         ArrayUnorderedList<Division> divisions = getDivisions();
 
