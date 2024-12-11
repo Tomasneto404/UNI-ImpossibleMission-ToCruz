@@ -1,63 +1,86 @@
 package Game.Simulations;
 
+import ClassesAulas.ArrayUnorderedList;
+import ExceptionsAulas.EmptyCollectionException;
+import Game.Entitys.Player;
+import Game.Exceptions.DeadPlayerException;
+import Game.Exceptions.EnemiesStillAliveException;
+import Game.Exceptions.LeaveGameException;
 import Game.Interfaces.Simulation;
-
-import java.util.Scanner;
-
-import static java.lang.System.exit;
+import Game.Game;
+import Game.Mission.Division;
+import Game.Mission.Map;
+import Game.Mission.Scenario;
 
 public class ManualSimulation implements Simulation {
 
+    private Game game;
+    private Player player;
+    private ArrayUnorderedList<Division> pathToExport;
+
+    public ManualSimulation(Game game) {
+        this.game = game;
+    }
+
     public void start() {
 
-        Scanner scanner = new Scanner(System.in);
-        String command;
+        player = game.getPlayer();
+        Map<Division> map = game.getMap();
+        pathToExport = new ArrayUnorderedList<>();
 
-        System.out.println("\n=== Mission Simulator ===");
-        do {
-            System.out.println("\nChoose an option:");
-            System.out.println("1. Play");
-            System.out.println("2. View Map");
-            System.out.println("3. Shortest path to Target (Dijkstra)");
-            System.out.println("0. Exit");
-            System.out.print("> ");
+        Division startDivision = game.selectEntrancesExits();
+        boolean canJoinNewDivision = false;
 
-            command = scanner.nextLine();
+        if (startDivision == null) {
+            System.out.println("No starting division chosen. Exiting...");
+            return;
+        }
 
-            switch (command) {
-                case "1":
-                    //play();
-                    break;
+        player.move(startDivision);
 
-                case "2":
-                    //System.out.println(map.toString());
-                    break;
+        try {
+            while (!player.isMissionSuccessful()) {
+                Scenario scene = new Scenario();
+                canJoinNewDivision = true;
 
-                case "3":
-                    /*try {
-                        //showShortestPath();
-                    } catch (EmptyCollectionException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    
-                     */
+                Division currentDivision = player.getDivision();
+                pathToExport.addToRear(currentDivision);
 
-                    break;
+                if (!player.isAlive()){
+                    throw new DeadPlayerException(player.getName() + " died! Leaving ...");
+                }
 
-                case "0":
-                    System.out.println("Leaving program...");
-                    break;
+                if (currentDivision == null) {
+                    System.out.println("No division chosen. Exiting...");
+                    return;
+                }
 
-                default:
-                    System.out.println("Invalid option.");
+                System.out.println("You are in <" + currentDivision + ">");
+                player.resetOcasionalVariables();
+                game.displayImportantInfo();
+
+                try {
+                    scene.executeScenario(player, map);
+                } catch (EnemiesStillAliveException | EmptyCollectionException e) {
+                    System.out.println(e.getMessage());
+                    canJoinNewDivision = false;
+                }
+
+                if (canJoinNewDivision) {
+                    player.move(game.selectNewDivision(currentDivision));
+                }
+
             }
+        } catch (LeaveGameException | DeadPlayerException e) {
+            System.out.println(e.getMessage());
+        }
+        exportData();
+    }
 
-        } while (!command.equals("0"));
+    @Override
+    public void exportData() {
 
     }
 
-    private void stop() {
-        //Guardar dados em ficheiro e fechar
-        exit(0);
-    }
+
 }

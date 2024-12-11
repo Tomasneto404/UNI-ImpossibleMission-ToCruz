@@ -5,6 +5,7 @@ import Game.*;
 import Game.Entitys.Enemy;
 import Game.Exceptions.FileNotFoundException;
 import Game.ImportExport.JSONImporter;
+import Game.Items.Item;
 
 /**
  * Classe responsavel por representar a versao da missao de To Cruz
@@ -30,7 +31,7 @@ public class Mission {
         this.enemies = new ArrayUnorderedList<>();
         this.divisions = new ArrayUnorderedList<>();
         this.entrancesExites = new ArrayUnorderedList<>();
-        this.items = new ArrayUnorderedList<>();
+        this.items = new ArrayUnorderedList<Item>();
         this.map = new Map<>();
 
         try {

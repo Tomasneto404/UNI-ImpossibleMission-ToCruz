@@ -1,6 +1,7 @@
 package Game.Menu;
 
 import Game.Entitys.Enemy;
+import Game.Entitys.Player;
 
 public final class PrintLines {
 
@@ -16,16 +17,16 @@ public final class PrintLines {
         System.out.println("Scenario 3 - Watch Out: Enemies arrived to your current divisionr!");
     }
 
-    public void scenario4() {
-        System.out.println("Scenario 4 - Tó cruz used recovery items.");
+    public void scenario4(Player player) {
+        System.out.println("Scenario 4 - " + player.getName() + " used recovery items.");
     }
 
-    public void scenario5() {
-        System.out.println("Scenario 5 - Tó Cruz finds the target, but there are enemies in the division.");
+    public void scenario5(Player player) {
+        System.out.println("Scenario 5 - " + player.getName() + " finds the target, but there are enemies in the division.");
     }
 
-    public void scenario6() {
-        System.out.println("Scenario 6 - Tó Cruz finds the target without enemies in the division.");
+    public void scenario6(Player player) {
+        System.out.println("Scenario 6 - " + player.getName() + " finds the target without enemies in the division.");
     }
 
     public void withoutEnemies() {
@@ -56,12 +57,12 @@ public final class PrintLines {
         System.out.println("Tó Cruz received " + totalDamage + "  points of damage");
     }
 
-    public void danger() {
-        System.out.println("Tó cruz is in danger");
+    public void danger(Player player) {
+        System.out.println( player.getName() + " is in danger");
     }
 
-    public void attackEnemy(Enemy enemy){
-        System.out.println("Tó Cruz attacked " + enemy.getName());
+    public void attackEnemy(Player player, Enemy enemy){
+        System.out.println(player.getName() + " attacked " + enemy.getName());
     }
 
     public void options(){
@@ -78,5 +79,9 @@ public final class PrintLines {
 
     public void printLine() {
         System.out.println("\n");
+    }
+
+    public void targetSecured(Player player) {
+        System.out.println(player.getName() + " secured the target!");
     }
 }

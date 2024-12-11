@@ -3,6 +3,7 @@ package Game.Entitys;
 import ClassesAulas.ArrayStack;
 import ExceptionsAulas.EmptyCollectionException;
 import ExceptionsAulas.InvalidElementException;
+import Game.Items.Item;
 import Game.Mission.Division;
 import Game.Interfaces.*;
 import Game.Items.BulletProofVest;
@@ -103,22 +104,29 @@ public class Player implements Entity {
         return this.power;
     }
 
+
     public void useRecoveryItem() throws EmptyCollectionException {
         if (backpack.isEmpty()) {
             throw new EmptyCollectionException("There's no items in backpack.");
         }
         RecoveryItem item = backpack.pop();
-        item.applyEffect(this);
+
+        this.setHealth(this.health += item.getPoints());
+
         usedItem = true;
     }
 
+
+    /*
     public void useBulletProofVest(){
         BulletProofVest item= new BulletProofVest();
         item.applyEffect(this);
     }
 
+     */
 
-    public void addItem(IItem item) {
+    /*
+    public void addItem(Item item) {
         if(item instanceof BulletProofVest){
             BulletProofVest item1= (BulletProofVest) item;
             useBulletProofVest();
@@ -127,6 +135,7 @@ public class Player implements Entity {
         RecoveryItem item1= (RecoveryItem) item;
         item1= backpack.peek();
     }
+    */
 
     public void move(Division newDivision) {
 
@@ -144,11 +153,11 @@ public class Player implements Entity {
     }
 
     public boolean isMissionSuccessful() {
-
         return (target != null && target.isSecured());
     }
 
     public void catchTarget(Target target) {
+        target.secure();
         this.target = target;
     }
 
@@ -156,11 +165,11 @@ public class Player implements Entity {
         return this.target;
     }
 
-    public boolean isAlive(){
+    public boolean isAlive() {
         return this.health > 0;
     }
 
-    public void resetOcasionalVariables(){
+    public void resetOcasionalVariables() {
         this.usedItem = false;
     }
 

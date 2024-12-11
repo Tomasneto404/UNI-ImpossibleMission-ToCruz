@@ -1,24 +1,11 @@
 package Game.Items;
 
-import Game.Interfaces.IItem;
-import Game.Entitys.Player;
+import Game.Mission.Division;
 
-public class BulletProofVest implements IItem {
+public class BulletProofVest extends Item {
 
-    private final int extraPoints;
-
-    public BulletProofVest() {
-        this.extraPoints = 10;
+    public BulletProofVest(Division division, int points) {
+        super(division, points);
     }
 
-
-    @Override
-    public int getPoints() {
-        return this.extraPoints;
-    }
-
-    @Override
-    public void applyEffect(Player player) {
-        player.setHealth(player.getHealth()+this.extraPoints);
-    }
 }

@@ -2,11 +2,13 @@ package Game.Mission;
 
 import ClassesAulas.ArrayUnorderedList;
 import Game.Entitys.Enemy;
+import Game.Items.Item;
 
 public class Division {
 
     private String name;
     private ArrayUnorderedList<Enemy> enemies;
+    private ArrayUnorderedList<Item> items;
     private boolean hasTarget;
     private boolean hasNewEnemies;
     private boolean isEntranceExit;
@@ -112,5 +114,13 @@ public class Division {
 
     public void setEntranceExit(boolean entranceExit) {
         isEntranceExit = entranceExit;
+    }
+
+    public ArrayUnorderedList<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(ArrayUnorderedList<Item> items) {
+        this.items = items;
     }
 }

@@ -5,7 +5,6 @@ import ExceptionsAulas.*;
 import Game.Entitys.Enemy;
 import Game.Entitys.Player;
 import Game.Exceptions.EnemiesStillAliveException;
-import Game.Game;
 import Game.Menu.PrintLines;
 
 import java.util.Iterator;
@@ -13,7 +12,7 @@ import java.util.Scanner;
 
 public class Scenario {
 
-    private int type; //identifica o número do cenário, é necessário um menu para isto
+    private int type;
 
     public Scenario() {
 
@@ -51,15 +50,18 @@ public class Scenario {
                 break;
 
             case 4:
-                print.scenario4();
+                print.scenario4(player);
                 break;
 
             case 5:
-                print.scenario5();
+                print.scenario5(player);
+                handleConfrontation(player, player.getDivision().getEnemies());
                 break;
 
             case 6:
-                print.scenario6();
+                print.scenario6(player);
+                player.catchTarget(map.getTarget());
+                print.targetSecured(player);
                 break;
 
         }
@@ -97,59 +99,7 @@ public class Scenario {
         return 0;
     }
 
-    public void executeScenario(Player player, ArrayUnorderedList<Enemy> enemies, Game game) throws InvalidElementException, EmptyCollectionException {
-        PrintLines print = new PrintLines();
-
-        switch (type) {
-            case 1:
-                print.scenario1();
-
-                if (!enemies.isEmpty()) {
-                    handleConfrontation(player, enemies);
-                } else {
-                    print.withoutEnemies();
-                }
-                break;
-
-            case 2:
-                print.scenario2();
-                //simulation.moveEnemies(enemies);
-                break;
-
-            case 3:
-                print.scenario3();
-                handleEnemyEntry(player);
-                break;
-
-            case 4:
-                print.scenario4();
-                player.useRecoveryItem();
-                break;
-
-            case 5:
-                print.scenario5();
-                handleConfrontation(player, enemies);
-
-                if (player.interactWithTarget(player.getTarget())) {
-                    print.interactedTarget();
-                } else {
-                    print.notInteractedTarget();
-                }
-                break;
-
-            case 6:
-                print.scenario6();
-
-                if (player.interactWithTarget(player.getTarget())) {
-                    print.success();
-                } else {
-                    print.notInteractedTarget();
-                }
-                break;
-        }
-    }
-
-    public void handleConfrontation(Player player, ArrayUnorderedList<Enemy> enemies) throws EnemiesStillAliveException, EmptyCollectionException {
+    private void handleConfrontation(Player player, ArrayUnorderedList<Enemy> enemies) throws EnemiesStillAliveException, EmptyCollectionException {
         PrintLines print = new PrintLines();
         int totalDamage = 0;
         int deadEnemiesCounter = 0;
@@ -170,7 +120,7 @@ public class Scenario {
                     Enemy enemy = iterator.next();
 
                     enemy.takeDamage(player.getPower());
-                    print.attackEnemy(enemy);
+                    print.attackEnemy(player, enemy);
 
                     if (!enemy.isAlive()) {
                         iterator.remove();
@@ -201,8 +151,7 @@ public class Scenario {
         }
     }
 
-
-    public void handleEnemyEntry(Player player) {
+    private void handleEnemyEntry(Player player) {
         int totalDamage = 0;
         PrintLines print = new PrintLines();
         ArrayUnorderedList<Enemy> enemies = player.getDivision().getEnemies();
@@ -224,6 +173,11 @@ public class Scenario {
         } catch (InvalidElementException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void handleTargetFind(Player player) throws EmptyCollectionException {
+
 
     }
 }

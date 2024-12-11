@@ -1,9 +1,11 @@
 package Game.ImportExport;
 
+import Game.Items.Item;
+import Game.Items.BulletProofVest;
+import Game.Items.RecoveryItem;
 import Game.Mission.Division;
 import Game.Entitys.Enemy;
 import Game.Enums.ItemType;
-import Game.Item;
 import Game.Mission.Map;
 import Game.Mission.Target;
 import org.json.simple.JSONArray;
@@ -272,37 +274,29 @@ public class JSONImporter {
                     JSONObject itemObj = (JSONObject) item;
 
                     String division = (String) itemObj.get("divisao");
+                    Division itemDivision = new Division(division);
+
                     String readType = (String) itemObj.get("tipo");
 
-                    ItemType type;
+                    Item tmpItem;
+                    int points;
 
                     switch (readType) {
                         case "kit de vida":
-                            type = ItemType.HEALTH_KIT;
+                            points = ((Long) itemObj.get("pontos-recuperados")).intValue();
+                            tmpItem = new RecoveryItem(itemDivision, points);
+                            listItems.addToRear(tmpItem);
                             break;
+
                         case "colete":
-                            type = ItemType.BULLET_PROOF_VEST;
+                            points = ((Long) itemObj.get("pontos-extra")).intValue();
+                            tmpItem = new BulletProofVest(itemDivision, points);
+                            listItems.addToRear(tmpItem);
                             break;
+
                         default:
-                            type = ItemType.WEAPON;
                             break;
                     }
-
-                    int points;
-                    Item tmpItem;
-
-                    if (itemObj.containsKey("pontos-recuperados")) {
-                        points = ((Long) itemObj.get("pontos-recuperados")).intValue();
-
-                        tmpItem = new Item(new Division(division), points, type);
-
-                    } else {
-                        points = ((Long) itemObj.get("pontos-extra")).intValue();
-
-                        tmpItem = new Item(new Division(division), type, points);
-                    }
-
-                    listItems.addToRear(tmpItem);
 
                 }
 
@@ -348,10 +342,13 @@ public class JSONImporter {
 
                 if (startVertex != null && endVertex != null) {
 
-                    Division startVertexWithEnemies = addEnemiesToDivision(startVertex);
-                    Division endVertexWithEnemies = addEnemiesToDivision(endVertex);
+                    startVertex.setItems(addItemsToDivision(startVertex));
+                    startVertex.setEnemies(addEnemiesToDivision(startVertex));
 
-                    tmpMap.addEdge(startVertexWithEnemies, endVertexWithEnemies);
+                    endVertex.setItems(addItemsToDivision(endVertex));
+                    endVertex.setEnemies(addEnemiesToDivision(endVertex));
+
+                    tmpMap.addEdge(startVertex, endVertex);
 
                 } else {
                     throw new DivisionNotFoundException("Division not found.");
@@ -385,7 +382,7 @@ public class JSONImporter {
 
     }
 
-    private Division addEnemiesToDivision(Division division) {
+    private ArrayUnorderedList<Enemy> addEnemiesToDivision(Division division) {
 
         ArrayUnorderedList<Enemy> enemies = getEnemies();
         ArrayUnorderedList<Enemy> tmpEnemies = new ArrayUnorderedList<>();
@@ -396,9 +393,20 @@ public class JSONImporter {
             }
         }
 
-        division.setEnemies(tmpEnemies);
+        return tmpEnemies;
+    }
 
-        return division;
+    private ArrayUnorderedList<Item> addItemsToDivision(Division division) {
+        ArrayUnorderedList<Item> items = getItems();
+        ArrayUnorderedList<Item> tmpItems = new ArrayUnorderedList<>();
+
+        for (Item item : items) {
+            if (item.getDivision().equals(division)) {
+                tmpItems.addToRear(item);
+            }
+        }
+
+        return tmpItems;
     }
 
 }

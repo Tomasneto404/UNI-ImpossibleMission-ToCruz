@@ -84,11 +84,11 @@ public class Map<T> extends Graph<T> {
         return divisions;
     }
 
-    public ArrayUnorderedList<Division> findShortestPath(Division start, Division target) throws EmptyCollectionException {
+    public ArrayUnorderedList<Division> findShortestPath(Division start, Division target) {
         PrintLines print = new PrintLines();
 
         LinkedQueue<Division> queue = new LinkedQueue<>();
-        int[] predecessors = new int[vertices.length]; // Armazena predecessores das divisões
+        int[] predecessors = new int[vertices.length];
         boolean[] visited = new boolean[vertices.length];
 
         int startIndex = getIndex((T) start);
@@ -105,29 +105,38 @@ public class Map<T> extends Graph<T> {
         predecessors[startIndex] = -1;
 
         while (!queue.isEmpty()) {
-            Division current = queue.dequeue();
-            int currentIndex = getIndex((T) current);
 
-            if (current.equals(target)) {
-                int step = targetIndex;
+            try {
+                Division current = queue.dequeue();
 
-                while (step != -1) {
-                    path.addToFront((Division) vertices[step]);
-                    step = predecessors[step];
+                int currentIndex = getIndex((T) current);
+
+                if (current.equals(target)) {
+                    int step = targetIndex;
+
+                    while (step != -1) {
+                        path.addToFront((Division) vertices[step]);
+                        step = predecessors[step];
+                    }
+                    return path;
                 }
-                return path;
+
+                ArrayUnorderedList<Division> adjacentDivisions = getDivisionInaRange(current, 1);
+                for (Division neighbor : adjacentDivisions) {
+                    int neighborIndex = getIndex((T) neighbor);
+                    if (!visited[neighborIndex]) {
+                        visited[neighborIndex] = true;
+                        predecessors[neighborIndex] = currentIndex;
+                        queue.enqueue(neighbor);
+                    }
+                }
+
+            } catch (EmptyCollectionException e) {
+                throw new RuntimeException(e);
             }
 
-            ArrayUnorderedList<Division> adjacentDivisions = getDivisionInaRange(current, 1);
-            for (Division neighbor : adjacentDivisions) {
-                int neighborIndex = getIndex((T) neighbor);
-                if (!visited[neighborIndex]) {
-                    visited[neighborIndex] = true;
-                    predecessors[neighborIndex] = currentIndex;
-                    queue.enqueue(neighbor);
-                }
-            }
         }
+
         print.pathNotFound();
         return new ArrayUnorderedList<>();
     }
@@ -227,6 +236,5 @@ public class Map<T> extends Graph<T> {
     public void moveEnemies() {
 
     }
-
 
 }
