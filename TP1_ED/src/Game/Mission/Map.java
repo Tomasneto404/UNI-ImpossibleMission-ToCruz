@@ -2,10 +2,13 @@ package Game.Mission;
 
 import ClassesAulas.ArrayUnorderedList;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Random;
 
 import ClassesAulas.LinkedQueue;
 import ExceptionsAulas.EmptyCollectionException;
+import Game.Entitys.Enemy;
 import Game.Menu.PrintLines;
 
 /**
@@ -233,8 +236,37 @@ public class Map<T> extends Graph<T> {
         return divisions;
     }
 
-    public void moveEnemies() {
+    public void moveEnemy(Enemy enemy) {
+        Division currentDivision = enemy.getDivision();
 
+        try {
+            ArrayUnorderedList<Division> divisionsWithinRange = getDivisionInaRange(currentDivision, 2);
+
+            if (divisionsWithinRange.isEmpty()) {
+                Random rand = new Random();//permite selecionar uma divisão aleatoriamente
+                Division newDivision = new Division();
+
+                System.out.println(enemy.getName() + " moved from " + currentDivision.getName() + " to " + newDivision.getName());
+
+                currentDivision.getEnemies().remove(enemy);
+                newDivision.getEnemies().addToFront(enemy);
+                enemy.newDivision(newDivision);
+
+            }
+        } catch (EmptyCollectionException e) {
+            System.out.println("It's impossible move enemies");
+        }
+    }
+
+    public void moveEnemies() throws EmptyCollectionException {
+        for (Division division : getDivisions()) {
+
+            ArrayUnorderedList<Enemy> enemies = new ArrayUnorderedList<>();
+            
+            for (Enemy enemy : enemies) {
+                moveEnemy(enemy);
+            }
+        }
     }
 
 }

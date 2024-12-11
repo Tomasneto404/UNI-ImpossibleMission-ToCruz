@@ -36,21 +36,11 @@ public class Enemy implements Entity {
     }
 
 
-    public void moveEnemy(Map map, Enemy enemy) throws EmptyCollectionException {
-        //Comparar a division do enemy e ver quais sao adjacentes num máximo de graus e mover aleatoriamente
+    public void newDivision(Division division) throws EmptyCollectionException {
+        this.division=division;
     }
 
-    public void moveEnemies(Map map, ArrayUnorderedList<Enemy> enemies) throws EmptyCollectionException {
-        Iterator<Enemy> iterator = enemies.iterator();
-        while (iterator.hasNext()) {
-            Enemy enemy = iterator.next();
-            try {
-                moveEnemy(map, enemy);
-            } catch (EmptyCollectionException e) {
-                throw new EmptyCollectionException("It's impossible move enemies");
-            }
-        }
-    }
+
     public void takeDamage(int damage) {
         this.health -= damage;
         if (this.health < 0) {
