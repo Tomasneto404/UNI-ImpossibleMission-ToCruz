@@ -1,4 +1,4 @@
-package Game;
+package Game.Mission;
 
 import ClassesAulas.ArrayUnorderedList;
 import ClassesAulas.LinkedQueue;

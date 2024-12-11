@@ -3,7 +3,13 @@ package Game.Simulations;
 import ClassesAulas.ArrayUnorderedList;
 import ExceptionsAulas.EmptyCollectionException;
 import ExceptionsAulas.InvalidElementException;
-import Game.*;
+import Game.Entitys.Enemy;
+import Game.Entitys.Player;
+import Game.Interfaces.Simulation;
+import Game.Menu.PrintLines;
+import Game.Mission.Division;
+import Game.Mission.Map;
+import Game.Mission.Mission;
 
 public class AutomaticSimulation implements Simulation {
     private Map<Division> map;

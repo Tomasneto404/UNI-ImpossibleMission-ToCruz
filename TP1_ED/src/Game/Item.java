@@ -1,6 +1,7 @@
 package Game;
 //para apagar
 import Game.Enums.ItemType;
+import Game.Mission.Division;
 
 public class Item {
     private Division division;

@@ -1,9 +1,9 @@
 package Game.Interfaces;
 
 import ExceptionsAulas.InvalidElementException;
-import Game.Division;
+import Game.Mission.Division;
 
-public interface CommonDetails {
+public interface Entity {
 
     public String getName();
 

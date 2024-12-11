@@ -1,16 +1,15 @@
-package Game;
+package Game.Entitys;
 
-import ClassesAulas.ArrayList;
 import ClassesAulas.ArrayUnorderedList;
-import ClassesAulas.LinkedList;
-import ClassesAulas.LinkedQueue;
 import ExceptionsAulas.EmptyCollectionException;
 import ExceptionsAulas.InvalidElementException;
-import Game.Interfaces.CommonDetails;
+import Game.Mission.Division;
+import Game.Interfaces.Entity;
+import Game.Mission.Map;
 
 import java.util.Iterator;
 
-public class Enemy implements CommonDetails {
+public class Enemy implements Entity {
 
 
 

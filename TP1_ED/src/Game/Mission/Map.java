@@ -1,4 +1,4 @@
-package Game;
+package Game.Mission;
 
 import ClassesAulas.ArrayUnorderedList;
 
@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 
 import ClassesAulas.LinkedQueue;
 import ExceptionsAulas.EmptyCollectionException;
+import Game.Menu.PrintLines;
 
 /**
  * Classe responsavel por guardar o mapa do jogo (grafo)

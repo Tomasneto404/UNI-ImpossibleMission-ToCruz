@@ -1,7 +1,7 @@
 package Game.Items;
 
 import Game.Interfaces.IItem;
-import Game.Player;
+import Game.Entitys.Player;
 
 public class BulletProofVest implements IItem {
 

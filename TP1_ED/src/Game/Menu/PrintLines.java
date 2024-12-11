@@ -1,4 +1,6 @@
-package Game;
+package Game.Menu;
+
+import Game.Entitys.Enemy;
 
 public final class PrintLines {
 

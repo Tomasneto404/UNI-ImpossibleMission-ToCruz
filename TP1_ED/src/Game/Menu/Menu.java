@@ -1,8 +1,11 @@
-package Game;
+package Game.Menu;
+
+import Game.Mission.Division;
+import Game.Mission.Map;
 
 import java.util.Scanner;
 
-public class UserInterface {
+public class Menu {
 
     private Map<Division> map;
 
@@ -10,7 +13,7 @@ public class UserInterface {
 
     }
 
-    public UserInterface(Map<Division> map){
+    public Menu(Map<Division> map){
         this.map = map;
     }
 

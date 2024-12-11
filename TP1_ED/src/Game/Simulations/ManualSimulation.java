@@ -1,6 +1,6 @@
 package Game.Simulations;
 
-import ExceptionsAulas.EmptyCollectionException;
+import Game.Interfaces.Simulation;
 
 import java.util.Scanner;
 

@@ -1,13 +1,15 @@
-package Game;
+package Game.Entitys;
 
 import ClassesAulas.ArrayStack;
 import ExceptionsAulas.EmptyCollectionException;
 import ExceptionsAulas.InvalidElementException;
+import Game.Mission.Division;
 import Game.Interfaces.*;
 import Game.Items.BulletProofVest;
 import Game.Items.RecoveryItem;
+import Game.Mission.Target;
 
-public class Player implements CommonDetails {
+public class Player implements Entity {
 
     private final int DEFAULT_HEALTH = 100;
     private final int DEFAULT_POWER = 10;

@@ -1,4 +1,5 @@
-package Game;
+package Game.Mission;
+
 //para apagar
 public class Target {
 

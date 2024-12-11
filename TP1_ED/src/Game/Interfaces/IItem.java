@@ -1,7 +1,6 @@
 package Game.Interfaces;
 
-import Game.Division;
-import Game.Player;
+import Game.Entitys.Player;
 
 public interface IItem {
 

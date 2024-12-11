@@ -1,6 +1,7 @@
-package Game;
+package Game.Mission;
 
 import ClassesAulas.ArrayUnorderedList;
+import Game.Entitys.Enemy;
 
 public class Division {
 
