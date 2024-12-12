@@ -9,6 +9,8 @@ import java.util.Random;
 import ClassesAulas.LinkedQueue;
 import ExceptionsAulas.EmptyCollectionException;
 import Game.Entitys.Enemy;
+import Game.Entitys.Player;
+import Game.Items.RecoveryItem;
 import Game.Menu.PrintLines;
 
 /**
@@ -262,11 +264,36 @@ public class Map<T> extends Graph<T> {
         for (Division division : getDivisions()) {
 
             ArrayUnorderedList<Enemy> enemies = new ArrayUnorderedList<>();
-            
+
             for (Enemy enemy : enemies) {
                 moveEnemy(enemy);
             }
         }
+    }
+
+    public RecoveryItem getNearestRecoveryItem(Player player) {
+        ArrayUnorderedList<RecoveryItem> recoveryItems = new ArrayUnorderedList<>();
+        RecoveryItem closestKit = null;
+
+        int minDistance = Integer.MAX_VALUE;
+        Division playerDivision = player.getDivision();
+
+        for (RecoveryItem kit : recoveryItems) {
+            ArrayUnorderedList<Division> path = findShortestPath(playerDivision, kit.getDivision());
+            int distance = path.size();
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestKit = kit;
+            }
+
+        }
+
+        if (closestKit != null) {
+            return closestKit;
+        }
+
+        return null;
     }
 
 }
