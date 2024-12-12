@@ -3,9 +3,7 @@ package Game.Simulations;
 import ClassesAulas.ArrayUnorderedList;
 import ExceptionsAulas.EmptyCollectionException;
 import Game.Entitys.Player;
-import Game.Exceptions.DeadPlayerException;
-import Game.Exceptions.EnemiesStillAliveException;
-import Game.Exceptions.LeaveGameException;
+import Game.Exceptions.*;
 import Game.Interfaces.Simulation;
 import Game.Game;
 import Game.Mission.Division;
@@ -25,28 +23,32 @@ public class ManualSimulation implements Simulation {
     public void start() {
 
         player = game.getPlayer();
+        player.reset();
         Map<Division> map = game.getMap();
         pathToExport = new ArrayUnorderedList<>();
-
-        Division startDivision = game.selectEntrancesExits();
-        boolean canJoinNewDivision = false;
-
-        if (startDivision == null) {
-            System.out.println("No starting division chosen. Exiting...");
-            return;
-        }
-
-        player.move(startDivision);
+        boolean success = false;
 
         try {
-            while (!player.isMissionSuccessful()) {
+            Division startDivision = game.selectEntrancesExits();
+            boolean canJoinNewDivision;
+
+            if (startDivision == null) {
+                System.out.println("No starting division was chosen. Exiting...");
+                return;
+            }
+
+            player.move(startDivision);
+            player.setInTheBuilding(true);
+
+            while (player.isInTheBuilding()) {
+
                 Scenario scene = new Scenario();
                 canJoinNewDivision = true;
 
                 Division currentDivision = player.getDivision();
                 pathToExport.addToRear(currentDivision);
 
-                if (!player.isAlive()){
+                if (!player.isAlive()) {
                     throw new DeadPlayerException(player.getName() + " died! Leaving ...");
                 }
 
@@ -55,25 +57,39 @@ public class ManualSimulation implements Simulation {
                     return;
                 }
 
-                System.out.println("You are in <" + currentDivision + ">");
-                player.resetOcasionalVariables();
-                game.displayImportantInfo();
+                if (game.playerInsideBuilding()) {
 
-                try {
-                    scene.executeScenario(player, map);
-                } catch (EnemiesStillAliveException | EmptyCollectionException e) {
-                    System.out.println(e.getMessage());
-                    canJoinNewDivision = false;
+                    System.out.println("You are in <" + currentDivision + ">");
+                    player.resetOcasionalVariables();
+                    game.displayImportantInfo();
+
+                    try {
+                        scene.executeScenario(player, map);
+                    } catch (EnemiesStillAliveException | EmptyCollectionException | InvalidOptionException |
+                             NoItemsInBackpackException | LeaveBuildingException e) {
+                        System.out.println(e.getMessage());
+                        canJoinNewDivision = false;
+                    }
+
+                    if (canJoinNewDivision) {
+                        player.move(game.selectNewDivision(currentDivision));
+                    }
                 }
 
-                if (canJoinNewDivision) {
-                    player.move(game.selectNewDivision(currentDivision));
-                }
+                success = game.wasMissionSuccessfull();
 
             }
-        } catch (LeaveGameException | DeadPlayerException e) {
+
+        } catch (LeaveGameException | DeadPlayerException | LeaveBuildingException e) {
             System.out.println(e.getMessage());
         }
+
+        if (success) {
+            System.out.println("Congratulations! Mission Complete!");
+        } else {
+            System.out.println("Mission was not complete. Try again.");
+        }
+
         exportData();
     }
 

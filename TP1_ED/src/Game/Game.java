@@ -4,9 +4,11 @@ import ClassesAulas.ArrayUnorderedList;
 import ExceptionsAulas.EmptyCollectionException;
 import Game.Entitys.Player;
 import Game.Exceptions.LeaveGameException;
+import Game.Menu.PrintLines;
 import Game.Mission.Division;
 import Game.Mission.Map;
 import Game.Mission.Mission;
+import Game.Mission.Target;
 
 import java.util.Scanner;
 
@@ -114,6 +116,26 @@ public class Game {
         System.out.println("[HP: " + player.getHealth() + "| Pwr: " + player.getPower() + "]");
     }
 
+    public boolean playerInsideBuilding() {
+
+        if (player.getDivision().isEntranceExit()) {
+
+            PrintLines print = new PrintLines();
+            Scanner scanner = new Scanner(System.in);
+            String option;
+
+            print.optionLeave();
+            option = scanner.nextLine();
+
+            if (option.equals("1")) {
+                player.setInTheBuilding(false);
+            }
+
+        }
+
+        return player.isInTheBuilding();
+    }
+
     public void showMap(){
         System.out.println(map.toString());
     }
@@ -129,4 +151,19 @@ public class Game {
     public Mission getMission() {
         return this.mission;
     }
+
+    public boolean wasMissionSuccessfull(){
+
+        boolean success = false;
+        Target target = player.getTarget();
+
+        if (!player.isInTheBuilding() && target != null && target.isSecured()) {
+
+            success = true;
+
+        }
+
+        return success;
+    }
+
 }

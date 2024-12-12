@@ -7,7 +7,6 @@ import Game.Items.Item;
 import Game.Mission.Division;
 import Game.Interfaces.*;
 import Game.Items.BulletProofVest;
-import Game.Items.RecoveryItem;
 import Game.Mission.Target;
 
 public class Player implements Entity {
@@ -17,10 +16,11 @@ public class Player implements Entity {
     private String name;
     private int power;
     private Division division;
-    private ArrayStack<RecoveryItem> backpack;
+    private ArrayStack<Item> backpack;
     private int health;
     private Target target;
     private boolean usedItem;
+    private boolean inTheBuilding;
 
     {
         this.target = null;
@@ -32,20 +32,6 @@ public class Player implements Entity {
 
     public Player(String name) {
         this.name = name;
-    }
-
-    public Player(String name, int power, Division division) {
-        this.name = name;
-        this.power = power;
-        this.division = division;
-    }
-
-    public ArrayStack<RecoveryItem> getBackpack() {
-        return backpack;
-    }
-
-    public void setBackpack(ArrayStack<RecoveryItem> backpack) {
-        this.backpack = backpack;
     }
 
     @Override
@@ -95,21 +81,11 @@ public class Player implements Entity {
         return power - OpositePower;
     }
 
-
-    public int increaseAttackPower(int value) throws InvalidElementException {
-        if (value <= 0) {
-            throw new InvalidElementException("The value is invalid");
-        }
-        this.power += value;
-        return this.power;
-    }
-
-
     public void useRecoveryItem() throws EmptyCollectionException {
         if (backpack.isEmpty()) {
             throw new EmptyCollectionException("There's no items in backpack.");
         }
-        RecoveryItem item = backpack.pop();
+        Item item = backpack.pop();
 
         this.setHealth(this.health += item.getPoints());
 
@@ -117,25 +93,10 @@ public class Player implements Entity {
     }
 
 
-    /*
-    public void useBulletProofVest(){
-        BulletProofVest item= new BulletProofVest();
-        item.applyEffect(this);
+    public void addItemToBackpack(Item item) {
+        backpack.push(item);
     }
 
-     */
-
-    /*
-    public void addItem(Item item) {
-        if(item instanceof BulletProofVest){
-            BulletProofVest item1= (BulletProofVest) item;
-            useBulletProofVest();
-        }
-
-        RecoveryItem item1= (RecoveryItem) item;
-        item1= backpack.peek();
-    }
-    */
 
     public void move(Division newDivision) {
 
@@ -143,17 +104,6 @@ public class Player implements Entity {
             this.setDivision(newDivision);
         }
 
-    }
-
-    public boolean interactWithTarget(Target target) {
-        if (this.getDivision() != null && this.getDivision().equals(target.getDivision())) {
-            return target.isSecured();
-        }
-        return false;
-    }
-
-    public boolean isMissionSuccessful() {
-        return (target != null && target.isSecured());
     }
 
     public void catchTarget(Target target) {
@@ -180,5 +130,25 @@ public class Player implements Entity {
     @Override
     public void takeDamage(int damage) {
         this.health -= damage;
+    }
+
+    public void dressBulletProffVest(BulletProofVest item) {
+        this.health += item.getPoints();
+    }
+
+    public void reset() {
+        this.target = null;
+        this.power = DEFAULT_POWER;
+        this.division = null;
+        this.backpack = new ArrayStack<>();
+        this.health = DEFAULT_HEALTH;
+    }
+
+    public boolean isInTheBuilding() {
+        return inTheBuilding;
+    }
+
+    public void setInTheBuilding(boolean inTheBuilding) {
+        this.inTheBuilding = inTheBuilding;
     }
 }

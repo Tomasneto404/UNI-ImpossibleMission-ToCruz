@@ -53,8 +53,8 @@ public final class PrintLines {
         System.out.println(enemy.getName() + " was defeated");
     }
 
-    public void playerDamage(int totalDamage) {
-        System.out.println("Tó Cruz received " + totalDamage + "  points of damage");
+    public void playerDamage(Player player, int totalDamage) {
+        System.out.println(player.getName() + " received " + totalDamage + " points of damage");
     }
 
     public void danger(Player player) {
@@ -62,11 +62,15 @@ public final class PrintLines {
     }
 
     public void attackEnemy(Player player, Enemy enemy){
-        System.out.println(player.getName() + " attacked " + enemy.getName());
+        System.out.println(player.getName() + " attacked " + enemy.getName() + " (Health:" + enemy.getHealth() + ")");
     }
 
     public void options(){
         System.out.println("Options: [1 - Attack | 2 - Use recovery item]");
+    }
+
+    public void optionLeave(){
+        System.out.println("Leave the building? [1 - Yes | 2 - No]");
     }
 
     public void pathNotFound() {
@@ -83,5 +87,17 @@ public final class PrintLines {
 
     public void targetSecured(Player player) {
         System.out.println(player.getName() + " secured the target!");
+    }
+
+    public void recoveryItemAdded(Player player) {
+        System.out.println(player.getName() + " catched a recovery item!");
+    }
+
+    public void dressBullterProffVest(Player player) {
+        System.out.println(player.getName() + " dressed a bullet proof vest!");
+    }
+
+    public void playerLeftBuilding(Player player) {
+        System.out.println(player.getName() + " left the building.");
     }
 }

@@ -47,13 +47,6 @@ public class Division {
     }
 
     public void setEnemies(ArrayUnorderedList<Enemy> enemies) {
-
-        /*
-        if (this.enemies != null){
-            hasNewEnemies = true;
-        }
-         */
-
         this.enemies = enemies;
     }
 
@@ -70,38 +63,8 @@ public class Division {
         return enemies != null && !enemies.isEmpty();
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Division) {
-            Division division = (Division) obj;
-            return name.equals(division.getName());
-        }
-        return false;
-    }
-
-    public String dataToString() {
-        String result = "[" + name + "] \n";
-
-        if (enemies != null && !enemies.isEmpty()) {
-            for (Enemy enemy : enemies) {
-                result += "- " + enemy.getName() + "\n";
-            }
-        }
-
-        return result;
-    }
-
-    public boolean isHasTarget() {
-        return hasTarget;
-    }
-
-    public boolean isHasNewEnemies() {
-        return hasNewEnemies;
+    public boolean hasItems() {
+        return items != null && !items.isEmpty();
     }
 
     public void setHasNewEnemies(boolean hasNewEnemies) {
@@ -122,5 +85,39 @@ public class Division {
 
     public void setItems(ArrayUnorderedList<Item> items) {
         this.items = items;
+    }
+
+    public String dataToString() {
+        String result = "[" + name + "] \n";
+
+        if (hasEnemies()) {
+            result += "Enemies: \n";
+            for (Enemy enemy : enemies) {
+                result += "- " + enemy.getName() + "\n";
+            }
+        }
+
+        if (hasItems()) {
+            result += "Items: \n";
+            for (Item item : items) {
+                result += "- " + item.getName() + "\n";
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Division) {
+            Division division = (Division) obj;
+            return name.equals(division.getName());
+        }
+        return false;
     }
 }

@@ -5,7 +5,7 @@ import Game.Mission.Division;
 public class RecoveryItem extends Item {
 
     public RecoveryItem(Division division, int points) {
-        super(division, points);
+        super(division, points, "Recovery Item");
     }
 
 }

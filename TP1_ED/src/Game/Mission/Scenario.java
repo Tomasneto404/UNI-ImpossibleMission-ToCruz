@@ -5,6 +5,12 @@ import ExceptionsAulas.*;
 import Game.Entitys.Enemy;
 import Game.Entitys.Player;
 import Game.Exceptions.EnemiesStillAliveException;
+import Game.Exceptions.InvalidOptionException;
+import Game.Exceptions.LeaveBuildingException;
+import Game.Exceptions.NoItemsInBackpackException;
+import Game.Items.BulletProofVest;
+import Game.Items.Item;
+import Game.Items.RecoveryItem;
 import Game.Menu.PrintLines;
 
 import java.util.Iterator;
@@ -12,24 +18,13 @@ import java.util.Scanner;
 
 public class Scenario {
 
-    private int type;
-
     public Scenario() {
-
     }
 
-    public Scenario(int type) {
-        if (type >= 1 && type <= 6) {
-            this.type = type;
-        }
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void executeScenario(Player player, Map map) throws EmptyCollectionException {
+    public void executeScenario(Player player, Map<Division> map) throws EmptyCollectionException {
         PrintLines print = new PrintLines();
+
+        handleItems(player);
 
         int sceneCode = analyzeSituation(player);
 
@@ -99,7 +94,7 @@ public class Scenario {
         return 0;
     }
 
-    private void handleConfrontation(Player player, ArrayUnorderedList<Enemy> enemies) throws EnemiesStillAliveException, EmptyCollectionException {
+    private void handleConfrontation(Player player, ArrayUnorderedList<Enemy> enemies) throws EnemiesStillAliveException, NoItemsInBackpackException {
         PrintLines print = new PrintLines();
         int totalDamage = 0;
         int deadEnemiesCounter = 0;
@@ -132,30 +127,33 @@ public class Scenario {
                 break;
 
             case "2":
-                player.useRecoveryItem();
+                try {
+                    player.useRecoveryItem();
+                } catch (EmptyCollectionException e) {
+                    throw new NoItemsInBackpackException(e.getMessage());
+                }
                 break;
 
             default:
-
-
+                throw new InvalidOptionException("Invalid option.");
         }
 
 
         if (totalDamage > 0) {
             player.takeDamage(totalDamage);
-            print.playerDamage(totalDamage);
+            print.playerDamage(player, totalDamage);
         }
 
         if (deadEnemiesCounter != enemies.size()) {
             throw new EnemiesStillAliveException("=There are still enemies in this division.=");
         }
+
     }
 
     private void handleEnemyEntry(Player player) {
         int totalDamage = 0;
         PrintLines print = new PrintLines();
         ArrayUnorderedList<Enemy> enemies = player.getDivision().getEnemies();
-
 
         for (Enemy enemy : enemies) {
             totalDamage += enemy.getPower();
@@ -164,7 +162,7 @@ public class Scenario {
         try {
 
             player.setHealth(player.calculateHealth(totalDamage));
-            print.playerDamage(totalDamage);
+            print.playerDamage(player, totalDamage);
 
             if (player.isAlive()) {
                 //player ataca ou usa item
@@ -176,8 +174,35 @@ public class Scenario {
 
     }
 
-    private void handleTargetFind(Player player) throws EmptyCollectionException {
+    private void handleItems(Player player) {
 
+        PrintLines printer = new PrintLines();
+
+        Division currentDivision = player.getDivision();
+
+        if (currentDivision.hasItems()) {
+
+            ArrayUnorderedList<Item> items = currentDivision.getItems();
+
+            for (Iterator<Item> iterator = items.iterator(); iterator.hasNext(); ) {
+                Item item = iterator.next();
+
+                if (item instanceof RecoveryItem) {
+
+                    player.addItemToBackpack(item);
+                    printer.recoveryItemAdded(player);
+
+                } else if (item instanceof BulletProofVest) {
+
+                    player.dressBulletProffVest((BulletProofVest) item);
+                    printer.dressBullterProffVest(player);
+
+                }
+
+                iterator.remove();
+            }
+        }
 
     }
+
 }
