@@ -11,7 +11,7 @@ import Game.Mission.Target;
 
 public class Player implements Entity {
 
-    private final int DEFAULT_HEALTH = 1;
+    private final int DEFAULT_HEALTH = 100;
     private final int DEFAULT_POWER = 10;
     private String name;
     private int power;
