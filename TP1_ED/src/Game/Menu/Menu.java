@@ -31,6 +31,8 @@ public class Menu {
         System.out.println("\n=== Mission Simulator ===");
 
         do {
+            game.reloadData();
+
             System.out.println("\nChoose an option:");
             System.out.println("1. Manual Simulation");
             System.out.println("2. Automatic Simulation");

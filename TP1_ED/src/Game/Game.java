@@ -166,4 +166,8 @@ public class Game {
         return success;
     }
 
+    public void reloadData(){
+        map = mission.getMap();
+    }
+
 }
