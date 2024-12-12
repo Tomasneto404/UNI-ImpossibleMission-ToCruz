@@ -1,7 +1,9 @@
 package Game.Menu;
 
+import ClassesAulas.ArrayUnorderedList;
 import Game.Entitys.Enemy;
 import Game.Entitys.Player;
+import Game.Mission.Division;
 
 public final class PrintLines {
 
@@ -58,14 +60,14 @@ public final class PrintLines {
     }
 
     public void danger(Player player) {
-        System.out.println( player.getName() + " is in danger");
+        System.out.println(player.getName() + " is in danger");
     }
 
-    public void attackEnemy(Player player, Enemy enemy){
+    public void attackEnemy(Player player, Enemy enemy) {
         System.out.println(player.getName() + " attacked " + enemy.getName());
     }
 
-    public void options(){
+    public void options() {
         System.out.println("Options: [1 - Attack | 2 - Use recovery item]");
     }
 
@@ -84,4 +86,14 @@ public final class PrintLines {
     public void targetSecured(Player player) {
         System.out.println(player.getName() + " secured the target!");
     }
+
+    public void printurn(int turn) {
+        System.out.println("turn: " + turn);
+    }
+
+    public void playerDefeated() {
+        System.out.println("Player defeated");
+    }
+
+
 }
