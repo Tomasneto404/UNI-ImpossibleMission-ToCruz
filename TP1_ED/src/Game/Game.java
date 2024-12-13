@@ -170,4 +170,42 @@ public class Game {
         map = mission.getMap();
     }
 
+    public void showShortestPathToTarget(Division startDivision){
+
+        Division targetDivision = map.getTarget().getDivision();
+        ArrayUnorderedList<Division> pathToTarget = map.findShortestPath(startDivision, targetDivision);
+
+        System.out.println("\n+SHORTEST PATH TO TARGET+");
+        for (Division division : pathToTarget) {
+            if (division != null) {
+
+                if (division.hasTarget()) {
+                    System.out.print("[" + division.toString() + "]");
+                } else {
+                    System.out.print("[" + division.toString() + "] -> ");
+                }
+
+            }
+        }
+        System.out.println("\n");
+
+    }
+
+    public void showShortestPathToExit(Division currentDivision, Division startDivision) {
+        ArrayUnorderedList<Division> pathToExit = map.findShortestPath(currentDivision, startDivision);
+
+        System.out.println("\n+SHORTEST PATH TO EXIT+");
+        for (Division division : pathToExit) {
+            if (division != null) {
+
+                if (division.hasTarget()) {
+                    System.out.print("[" + division.toString() + "]");
+                } else {
+                    System.out.print(" -> [" + division.toString() + "]");
+                }
+
+            }
+        }
+        System.out.println("\n");
+    }
 }

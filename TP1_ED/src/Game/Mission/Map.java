@@ -19,7 +19,6 @@ import Game.Menu.PrintLines;
 public class Map<T> extends Graph<T> {
 
     private Target target;
-    //private Division targetDivision;
 
     public Map() {
         super();

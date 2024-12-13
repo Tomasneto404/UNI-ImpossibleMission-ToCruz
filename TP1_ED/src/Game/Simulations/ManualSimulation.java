@@ -4,6 +4,7 @@ import ClassesAulas.ArrayUnorderedList;
 import ExceptionsAulas.EmptyCollectionException;
 import Game.Entitys.Player;
 import Game.Exceptions.*;
+import Game.ImportExport.JSONExporter;
 import Game.Interfaces.Simulation;
 import Game.Game;
 import Game.Mission.Division;
@@ -26,9 +27,11 @@ public class ManualSimulation implements Simulation {
         player.reset();
         Map<Division> map = game.getMap();
         pathToExport = new ArrayUnorderedList<>();
+
         boolean success = false;
 
         try {
+            showSimulationInfo();
             Division startDivision = game.selectEntrancesExits();
             boolean canJoinNewDivision;
 
@@ -72,6 +75,13 @@ public class ManualSimulation implements Simulation {
                     }
 
                     if (canJoinNewDivision) {
+
+                        if (!player.hasTarget()){
+                            game.showShortestPathToTarget(currentDivision);
+                        } else {
+                            game.showShortestPathToExit(currentDivision, startDivision);
+                        }
+
                         player.move(game.selectNewDivision(currentDivision));
                     }
                 }
@@ -95,8 +105,16 @@ public class ManualSimulation implements Simulation {
 
     @Override
     public void exportData() {
-
+        JSONExporter exporter = new JSONExporter("manualSimulation.json");
+        exporter.missionPath(pathToExport);
     }
 
+    private void showSimulationInfo(){
+        System.out.println("*MANUAL SIMULATION*");
+        System.out.println("Mission: " + game.getMission().getMissionCode());
+        System.out.println("Player: " + game.getPlayer().getName());
+        System.out.println("Target division: " + game.getMap().getTarget().getDivision());
+        System.out.println();
+    }
 
 }

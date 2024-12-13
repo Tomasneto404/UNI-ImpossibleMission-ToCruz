@@ -151,4 +151,8 @@ public class Player implements Entity {
     public void setInTheBuilding(boolean inTheBuilding) {
         this.inTheBuilding = inTheBuilding;
     }
+
+    public boolean hasTarget(){
+        return this.target != null;
+    }
 }

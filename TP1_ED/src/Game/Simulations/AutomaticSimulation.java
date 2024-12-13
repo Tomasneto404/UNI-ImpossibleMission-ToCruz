@@ -6,6 +6,7 @@ import Game.Entitys.Player;
 import Game.Exceptions.DeadPlayerException;
 import Game.Exceptions.EnemiesStillAliveException;
 import Game.Exceptions.LeaveGameException;
+import Game.ImportExport.JSONExporter;
 import Game.Interfaces.Simulation;
 import Game.Game;
 import Game.Mission.Division;
@@ -76,22 +77,22 @@ public class AutomaticSimulation implements Simulation {
                     System.out.println("Traget captured successfully in division: " + division);
                 }
             }
-            //reverse path
+
             pathToExport.addToRear(new Division("RETURN_PATH_MARKER"));
 
-            ArrayUnorderedList<Division> reversePath = map.findShortestPath(map.getTarget().getDivision(),startDivision);
+            ArrayUnorderedList<Division> reversePath = map.findShortestPath(map.getTarget().getDivision(), startDivision);
             if (reversePath == null) {
                 System.out.println("No valid path to the target found. Exiting...");
             }
             System.out.println("Starting path back to the entrance ...");
 
-            for(Division division : reversePath) {
+            for (Division division : reversePath) {
                 player.move(division);
                 pathToExport.addToRear(division);
 
-                System.out.println("Returning to : "+ division);
+                System.out.println("Returning to : " + division);
 
-                if(!player.isAlive()) {
+                if (!player.isAlive()) {
                     throw new DeadPlayerException(player.getName() + "died during the scape!");
                 }
             }
@@ -105,7 +106,8 @@ public class AutomaticSimulation implements Simulation {
 
     @Override
     public void exportData() {
-
+        JSONExporter exporter = new JSONExporter("automaticSimulation.json");
+        exporter.missionPath(pathToExport);
     }
 
 }
