@@ -13,15 +13,33 @@ import Game.Mission.Division;
 import Game.Mission.Map;
 import Game.Mission.Scenario;
 
+/**
+ * Represents an automatic simulation of the game where the player automatically navigates through
+ * the map to achieve objectives, encounter scenarios, and secure targets.
+ * This class implements the Simulation interface.
+ *
+ * @author Tânia Morais
+ * @author Tomás Neto
+ */
 public class AutomaticSimulation implements Simulation {
 
     private Game game;
     private ArrayUnorderedList<Division> pathToExport;
 
+    /**
+     * Constructs an 'AutomaticSimulation' object associated with the specified game instance.
+     *
+     * @param game The 'Game' object representing the current game state.
+     */
     public AutomaticSimulation(Game game) {
         this.game = game;
     }
 
+    /**
+     * Starts the automatic simulation, navigating through the map to achieve objectives.
+     * The method traverses the path, encounters scenarios, handles confrontations, and ensures
+     * proper handling of enemy encounters and challenges.
+     */
     @Override
     public void start() {
 
@@ -29,7 +47,7 @@ public class AutomaticSimulation implements Simulation {
         Map<Division> map = game.getMap();
         pathToExport = new ArrayUnorderedList<>();
 
-        Division startDivision= getNearestDivision(player.getDivision(), map);
+        Division startDivision = getNearestDivision(player.getDivision(), map);
         if (startDivision == null) {
             System.out.println("No starting division chosen. Exiting...");
             return;
@@ -80,19 +98,19 @@ public class AutomaticSimulation implements Simulation {
             //reverse path
             pathToExport.addToRear(new Division("RETURN_PATH_MARKER"));
 
-            ArrayUnorderedList<Division> reversePath = map.findShortestPath(map.getTarget().getDivision(),startDivision);
+            ArrayUnorderedList<Division> reversePath = map.findShortestPath(map.getTarget().getDivision(), startDivision);
             if (reversePath == null) {
                 System.out.println("No valid path to the target found. Exiting...");
             }
             System.out.println("Starting path back to the entrance ...");
 
-            for(Division division : reversePath) {
+            for (Division division : reversePath) {
                 player.move(division);
                 pathToExport.addToRear(division);
 
-                System.out.println("Returning to : "+ division);
+                System.out.println("Returning to : " + division);
 
-                if(!player.isAlive()) {
+                if (!player.isAlive()) {
                     throw new DeadPlayerException(player.getName() + "died during the scape!");
                 }
             }
@@ -104,25 +122,35 @@ public class AutomaticSimulation implements Simulation {
         exportData();
     }
 
+    /**
+     * Finds the nearest division to the player's current division on the map.
+     *
+     * @param currentDivision The Division where the player is currently located.
+     * @param map             The Map representing the game map.
+     * @return The nearest Division to the current division.
+     */
     private Division getNearestDivision(Division currentDivision, Map<Division> map) {
         Division nearestDivision = null;
         int minDistance = Integer.MAX_VALUE;
 
-        ArrayUnorderedList<Division> divisions=map.getDivisions();
-        int index=0;
+        ArrayUnorderedList<Division> divisions = map.getDivisions();
+        int index = 0;
 
-        for (Division division : map.getDivisions() ) {
-            if(division!=currentDivision) {
-                int distance=index++;
-                if(distance<minDistance) {
-                    minDistance=distance;
-                    nearestDivision=division;
+        for (Division division : map.getDivisions()) {
+            if (division != currentDivision) {
+                int distance = index++;
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearestDivision = division;
                 }
             }
         }
         return nearestDivision;
     }
 
+    /**
+     * Exports the traversal path data to a JSON file for logging and later analysis.
+     */
     @Override
     public void exportData() {
         JSONExporter exporter = new JSONExporter("automaticSimulation.json");

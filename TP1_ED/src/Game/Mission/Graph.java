@@ -9,6 +9,15 @@ import InterfacesAulas.GraphADT;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * Represents a graph data structure using an adjacency matrix implementation.
+ * The graph stores vertices and their connections and supports basic operations such as adding/removing vertices and edges,
+ * as well as traversing the graph using BFS (Breadth-First Search) and DFS (Depth-First Search).
+ *
+ * @param <T> The type representing the vertices in the graph.
+ * @author Tânia Morais
+ * @author Tomás Neto
+ */
 public class Graph<T> implements GraphADT<T> {
 
     protected final int DEFAULT_CAPACITY = 10;
@@ -25,6 +34,9 @@ public class Graph<T> implements GraphADT<T> {
         this.vertices = (T[]) (new Object[DEFAULT_CAPACITY]);
     }
 
+    /**
+     * Expands the capacity of the graph's adjacency matrix and vertex array when more space is needed.
+     */
     protected void expandCapacity() {
         T[] largerVertices = (T[]) (new Object[vertices.length * 2]);
         boolean[][] largerAdjMatrix = new boolean[vertices.length * 2][vertices.length * 2];
@@ -40,6 +52,13 @@ public class Graph<T> implements GraphADT<T> {
         adjMatrix = largerAdjMatrix;
     }
 
+    /**
+     * Retrieves the index of a given vertex in the graph's vertex array.
+     *
+     * @param vertex the vertex to find in the graph.
+     * @return the index of the vertex.
+     * @throws NoSuchElementException if the vertex is not found.
+     */
     protected int getIndex(T vertex) throws NoSuchElementException {
 
         for (int i = 0; i < numVertices; i++) {
@@ -51,6 +70,12 @@ public class Graph<T> implements GraphADT<T> {
 
     }
 
+    /**
+     * Checks if the provided index is within valid bounds for the graph's vertices array.
+     *
+     * @param index the index to check.
+     * @return true if the index is valid, false otherwise.
+     */
     private boolean indexIsValid(int index) {
         return (index >= 0 && index < numVertices);
     }
@@ -97,11 +122,21 @@ public class Graph<T> implements GraphADT<T> {
         numVertices++;
     }
 
+    /**
+     * Removes a vertex from the graph by its value.
+     *
+     * @param vertex the vertex to remove.
+     */
     @Override
     public void removeVertex(T vertex) {
         removeVertex(getIndex(vertex));
     }
 
+    /**
+     * Removes a vertex from the graph by its index.
+     *
+     * @param index the index of the vertex to remove.
+     */
     public void removeVertex(int index) {
 
         if (!isEmpty()) {
@@ -115,6 +150,12 @@ public class Graph<T> implements GraphADT<T> {
 
     }
 
+    /**
+     * Removes an edge between two vertices using their indices.
+     *
+     * @param index1 the index of the first vertex.
+     * @param index2 the index of the second vertex.
+     */
     public void removeEdge(int index1, int index2) {
         if (indexIsValid(index1) && indexIsValid(index2)) {
             adjMatrix[index1][index2] = false;
@@ -123,11 +164,23 @@ public class Graph<T> implements GraphADT<T> {
         }
     }
 
+    /**
+     * Removes an edge between two vertices by their values.
+     *
+     * @param vertex1 the first vertex.
+     * @param vertex2 the second vertex.
+     */
     @Override
     public void removeEdge(T vertex1, T vertex2) {
         removeEdge(getIndex(vertex1), getIndex(vertex2));
     }
 
+    /**
+     * Returns an iterator to traverse the graph using a depth-first search (DFS) starting from a specified vertex.
+     *
+     * @param startVertex the starting vertex for DFS traversal.
+     * @return an iterator that traverses the graph in DFS order.
+     */
     @Override
     public Iterator iteratorDFS(T startVertex) {
         try {
@@ -137,26 +190,53 @@ public class Graph<T> implements GraphADT<T> {
         }
     }
 
+    /**
+     * Placeholder for an unimplemented method to find the shortest path between two vertices.
+     *
+     * @param startVertex  the starting vertex.
+     * @param targetVertex the destination vertex.
+     */
     @Override
     public Iterator iteratorShortestPath(T startVertex, T targetVertex) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    /**
+     * Checks if the graph contains any vertices.
+     *
+     * @return true if the graph is empty, false otherwise.
+     */
     @Override
     public boolean isEmpty() {
         return (numVertices == 0);
     }
 
+    /**
+     * Placeholder for an unimplemented method to check if the graph is connected.
+     *
+     * @return false always as it is not implemented.
+     */
     @Override
     public boolean isConnected() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    /**
+     * Returns the number of vertices currently in the graph.
+     *
+     * @return the number of vertices in the graph.
+     */
     @Override
     public int size() {
         return numVertices;
     }
 
+    /**
+     * Returns an iterator to traverse the graph using a breadth-first search (BFS) starting from a specified vertex.
+     *
+     * @param startVertex the starting vertex for BFS traversal.
+     * @return an iterator that traverses the graph in BFS order.
+     */
     @Override
     public Iterator iteratorBFS(T startVertex) {
         try {

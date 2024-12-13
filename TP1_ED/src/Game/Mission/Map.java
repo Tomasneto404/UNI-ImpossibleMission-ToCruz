@@ -3,6 +3,7 @@ package Game.Mission;
 import ClassesAulas.ArrayUnorderedList;
 import ClassesAulas.LinkedQueue;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -13,24 +14,49 @@ import Game.Items.RecoveryItem;
 import Game.Menu.PrintLines;
 
 /**
- * Classe responsavel por guardar o mapa do jogo (grafo)
+ * The Map class represents the game's map, implemented as a graph.
+ *
+ * @param <T> The generic type representing the elements in the graph.
+ * @author Tânia Morais
+ * @author Tomás Neto
  */
 public class Map<T> extends Graph<T> {
 
     private Target target;
 
+    /**
+     * Default constructor for the Map class.
+     * Initializes the map as an empty graph.
+     */
     public Map() {
         super();
     }
 
+    /**
+     * Retrieves the target associated with the map.
+     *
+     * @return The target currently set in the map.
+     */
     public Target getTarget() {
         return target;
     }
 
+    /**
+     * Sets the target for the map.
+     *
+     * @param target The target to be set on the map.
+     */
     public void setTarget(Target target) {
         this.target = target;
     }
 
+    /**
+     * Returns the divisions adjacent to a specified division.
+     *
+     * @param division The division for which you want to find adjacent divisions.
+     * @return A list of adjacent divisions to the specified division.
+     * @throws NoSuchElementException If the division is not found in the graph.
+     */
     public ArrayUnorderedList<Division> getAdjacentDivisions(Division division) {
         ArrayUnorderedList<Division> adjacentDivisions = new ArrayUnorderedList<>();
 
@@ -49,7 +75,14 @@ public class Map<T> extends Graph<T> {
         return adjacentDivisions;
     }
 
-    //obter as divisoes à volta de uma determinada divisão num limite
+    /**
+     * Finds all divisions within a specified range of a given division, limited by `maxRange`.
+     *
+     * @param start    The starting division for the search.
+     * @param maxRange The maximum distance to search for divisions.
+     * @return A list of divisions within the specified range of the starting division.
+     * @throws EmptyCollectionException If the search encounters an empty collection.
+     */
     public ArrayUnorderedList<Division> getDivisionInaRange(Division start, int maxRange) throws EmptyCollectionException {
         ArrayUnorderedList<Division> divisions = new ArrayUnorderedList<>();
         LinkedQueue<Division> queue = new LinkedQueue<>();
@@ -64,7 +97,7 @@ public class Map<T> extends Graph<T> {
 
         int currentRange = 0;
 
-        // BFS até o limite de passos maxRange
+        //BFS iterator
         while (!queue.isEmpty() && currentRange < maxRange) {
             int size = queue.size();
             currentRange++;
@@ -87,11 +120,18 @@ public class Map<T> extends Graph<T> {
         return divisions;
     }
 
+    /**
+     * Finds the shortest path from a starting division to a target division.
+     *
+     * @param start  The starting division.
+     * @param target The target division to reach.
+     * @return A list representing the shortest path from start to target.
+     */
     public ArrayUnorderedList<Division> findShortestPath(Division start, Division target) {
         PrintLines print = new PrintLines();
 
         LinkedQueue<Division> queue = new LinkedQueue<>();
-        int[] predecessors = new int[vertices.length];
+        int[] antecessor = new int[vertices.length];
         boolean[] visited = new boolean[vertices.length];
 
         int startIndex = getIndex((T) start);
@@ -105,7 +145,7 @@ public class Map<T> extends Graph<T> {
         // BFS
         queue.enqueue(start);
         visited[startIndex] = true;
-        predecessors[startIndex] = -1;
+        antecessor[startIndex] = -1;
 
         while (!queue.isEmpty()) {
 
@@ -119,7 +159,7 @@ public class Map<T> extends Graph<T> {
 
                     while (step != -1) {
                         path.addToFront((Division) vertices[step]);
-                        step = predecessors[step];
+                        step = antecessor[step];
                     }
                     return path;
                 }
@@ -129,7 +169,7 @@ public class Map<T> extends Graph<T> {
                     int neighborIndex = getIndex((T) neighbor);
                     if (!visited[neighborIndex]) {
                         visited[neighborIndex] = true;
-                        predecessors[neighborIndex] = currentIndex;
+                        antecessor[neighborIndex] = currentIndex;
                         queue.enqueue(neighbor);
                     }
                 }
@@ -144,6 +184,11 @@ public class Map<T> extends Graph<T> {
         return new ArrayUnorderedList<>();
     }
 
+    /**
+     * Returns a string representation of the map's divisions and their connections.
+     *
+     * @return A formatted string showing divisions and their connections.
+     */
     @Override
     public String toString() {
 
@@ -196,6 +241,11 @@ public class Map<T> extends Graph<T> {
         return str;
     }
 
+    /**
+     * Returns a string representation of the  graph representations.
+     *
+     * @return A formatted string showing graph represention
+     */
     public String toStringGraphRepresentation() {
         String graphRepresentation = "";
 
@@ -223,6 +273,11 @@ public class Map<T> extends Graph<T> {
         return graphRepresentation;
     }
 
+    /**
+     * Retrieves a list of all divisions present in the graph.
+     *
+     * @return A list containing all divisions in the map.
+     */
     public ArrayUnorderedList<Division> getDivisions() {
         ArrayUnorderedList<Division> divisions = new ArrayUnorderedList<>();
 
@@ -236,39 +291,89 @@ public class Map<T> extends Graph<T> {
         return divisions;
     }
 
-    public void moveEnemy(Enemy enemy) {
-        Division currentDivision = enemy.getDivision();
+    /**
+     * Moves an enemy to a new division randomly within a certain range.
+     *
+     * @param enemy The enemy to be moved.
+     * @throws EmptyCollectionException If the collection of adjacent divisions is empty.
+     */
+    private void moveEnemy(Enemy enemy) throws EmptyCollectionException {
+        Random random = new Random();
 
-        try {
-            ArrayUnorderedList<Division> divisionsWithinRange = getDivisionInaRange(currentDivision, 2);
+        if (!enemy.isAlive()) {
+            return;
+        }
 
-            if (divisionsWithinRange.isEmpty()) {
-                Random rand = new Random();//permite selecionar uma divisão aleatoriamente
-                Division newDivision = new Division();
+        Division enemyStartDivision = enemy.getDivision();
 
-                System.out.println(enemy.getName() + " moved from " + currentDivision.getName() + " to " + newDivision.getName());
+        ArrayUnorderedList<Division> possibleMoveToDivisions = new ArrayUnorderedList<>();
 
-                currentDivision.getEnemies().remove(enemy);
-                newDivision.getEnemies().addToFront(enemy);
-                enemy.newDivision(newDivision);
+        for (Division division : getAdjacentDivisions(enemyStartDivision)) {
+            possibleMoveToDivisions.addToRear(division);
+
+            for (Division adjDivision : getAdjacentDivisions(division)) {
+
+                if (!possibleMoveToDivisions.contains(adjDivision)) {
+                    possibleMoveToDivisions.addToRear(adjDivision);
+                }
 
             }
-        } catch (EmptyCollectionException e) {
-            System.out.println("It's impossible move enemies");
+        }
+
+        if (possibleMoveToDivisions.isEmpty()) {
+            return;
+        }
+
+        int randomDivisionIndex = random.nextInt(possibleMoveToDivisions.size());
+        Division newDivision = null;
+
+        Iterator<Division> iterator = possibleMoveToDivisions.iterator();
+        for (int i = 0; iterator.hasNext(); i++) {
+            Division current = iterator.next();
+
+            if (i == randomDivisionIndex) {
+                newDivision = current;
+                break;
+            }
+
+        }
+
+        if (newDivision != null) {
+            enemyStartDivision.removeEnemy(enemy);
+            enemy.setDivision(newDivision);
+            newDivision.addEnemy(enemy);
         }
     }
 
+
+    /**
+     * Moves all enemies present on the map.
+     */
     public void moveEnemies() throws EmptyCollectionException {
         for (Division division : getDivisions()) {
 
-            ArrayUnorderedList<Enemy> enemies = new ArrayUnorderedList<>();
+            if (division.hasEnemies()) {
+                ArrayUnorderedList<Enemy> enemiesCopy = new ArrayUnorderedList<>();
 
-            for (Enemy enemy : enemies) {
-                moveEnemy(enemy);
+                for (Enemy enemy : division.getEnemies()) {
+                    enemiesCopy.addToRear(enemy);
+                }
+
+                for (Enemy enemy : enemiesCopy) {
+                    moveEnemy(enemy);
+                }
+
             }
         }
     }
 
+
+    /**
+     * Finds the nearest recovery item to a player by comparing distances across divisions.
+     *
+     * @param player The player for which recovery items are being searched.
+     * @return The closest recovery item available on the map.
+     */
     public RecoveryItem getNearestRecoveryItem(Player player) {
         ArrayUnorderedList<RecoveryItem> recoveryItems = new ArrayUnorderedList<>();
         RecoveryItem closestKit = null;

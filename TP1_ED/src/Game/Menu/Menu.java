@@ -1,26 +1,39 @@
 package Game.Menu;
 
 
-
 import java.util.Scanner;
+
 import Game.Game;
 import Game.Simulations.AutomaticSimulation;
 import Game.Simulations.ManualSimulation;
 import Game.Interfaces.Simulation;
 import Game.Mission.Mission;
 
+/**
+ * The Menu class represents the main interface for interacting with the
+ * game.
+ *
+ * @author Tânia Morais
+ * @author Tomás Neto
+ */
 public class Menu {
 
     private Game game;
 
-    {
-
-    }
-
+    /**
+     * Constructs a Menu instance with the specified game instance.
+     *
+     * @param game the game instance associated with the menu
+     */
     public Menu(Game game) {
         this.game = game;
     }
 
+    /**
+     * Displays the main menu and handles user input for navigating
+     * through the available options. Options include starting a manual
+     * or automatic simulation, viewing the map, and exiting the program.
+     */
     public void mainMenu() {
 
         Simulation simulation;

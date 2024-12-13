@@ -15,11 +15,27 @@ import Game.Menu.PrintLines;
 import java.util.Iterator;
 import java.util.Scanner;
 
+/**
+ * The 'Scenario' class is responsible for managing and executing different game scenarios.
+ *
+ * @author Tânia Morais
+ * @author Tomás Neto
+ */
 public class Scenario {
 
+    /**
+     * Default constructor for creating a `Scenario` object.
+     */
     public Scenario() {
     }
 
+    /**
+     * Executes the scenario for the player based on their current situation in the game map.
+     *
+     * @param player The `Player` object representing the player in the game.
+     * @param map    The `Map` object representing the divisions and their connections.
+     * @throws EmptyCollectionException If there are issues accessing a collection.
+     */
     public void executeScenario(Player player, Map<Division> map) throws EmptyCollectionException {
         PrintLines print = new PrintLines();
 
@@ -31,6 +47,7 @@ public class Scenario {
             case 1:
                 print.scenario1();
                 handleConfrontation(player, player.getDivision().getEnemies());
+                map.moveEnemies();
                 break;
 
             case 2:
@@ -62,6 +79,12 @@ public class Scenario {
 
     }
 
+    /**
+     * Analyzes the player's current situation in their division and determines the scenario code.
+     *
+     * @param player The `Player` object representing the player.
+     * @return An integer representing the scenario code.
+     */
     private int analyzeSituation(Player player) {
 
         if (player.getDivision().hasEnemies()) {
@@ -93,6 +116,14 @@ public class Scenario {
         return 0;
     }
 
+    /**
+     * Handles confrontations with enemies in a division by managing player attacks and recovery options.
+     *
+     * @param player  The `Player` object representing the player.
+     * @param enemies The `ArrayUnorderedList` of enemies present in the division.
+     * @throws EnemiesStillAliveException If enemies remain after a confrontation.
+     * @throws NoItemsInBackpackException If recovery items are not present in the player's backpack.
+     */
     private void handleConfrontation(Player player, ArrayUnorderedList<Enemy> enemies) throws EnemiesStillAliveException, NoItemsInBackpackException {
         PrintLines print = new PrintLines();
         int totalDamage = 0;
@@ -149,6 +180,11 @@ public class Scenario {
 
     }
 
+    /**
+     * Handles enemy entry into the division, calculating and applying the damage to the player.
+     *
+     * @param player The `Player` object representing the player.
+     */
     private void handleEnemyEntry(Player player) {
         int totalDamage = 0;
         PrintLines print = new PrintLines();
@@ -158,21 +194,54 @@ public class Scenario {
             totalDamage += enemy.getPower();
         }
 
-        try {
+        player.takeDamage(totalDamage);
+        print.playerDamage(player, totalDamage);
 
-            player.setHealth(player.calculateHealth(totalDamage));
-            print.playerDamage(player, totalDamage);
+        if (player.isAlive()) {
 
-            if (player.isAlive()) {
-                //player ataca ou usa item
+            Scanner scanner = new Scanner(System.in);
+            String option;
+
+            print.options();
+            option = scanner.nextLine();
+
+            switch (option) {
+                case "1":
+                    for (Iterator<Enemy> iterator = enemies.iterator(); iterator.hasNext(); ) {
+                        Enemy enemy = iterator.next();
+
+                        enemy.takeDamage(player.getPower());
+                        print.attackEnemy(player, enemy);
+
+                        if (!enemy.isAlive()) {
+                            iterator.remove();
+                            print.enemyDefeated(enemy);
+                        } else {
+                            totalDamage += enemy.getPower();
+                        }
+                    }
+                    break;
+
+                case "2":
+                    try {
+                        player.useRecoveryItem();
+                    } catch (EmptyCollectionException e) {
+                        throw new NoItemsInBackpackException(e.getMessage());
+                    }
+                    break;
+
+                default:
+                    throw new InvalidOptionException("Invalid option.");
             }
-
-        } catch (InvalidElementException e) {
-            e.printStackTrace();
         }
 
     }
 
+    /**
+     * Handles item interactions by allowing the player to acquire and use items in the current division.
+     *
+     * @param player The `Player` object representing the player.
+     */
     private void handleItems(Player player) {
 
         PrintLines printer = new PrintLines();

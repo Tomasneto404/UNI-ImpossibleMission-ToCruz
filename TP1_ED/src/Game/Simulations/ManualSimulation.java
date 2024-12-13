@@ -11,16 +11,28 @@ import Game.Mission.Division;
 import Game.Mission.Map;
 import Game.Mission.Scenario;
 
+/**
+ * Represents the manual simulation of the game.
+ * This classe implements Simulation interface .
+ */
 public class ManualSimulation implements Simulation {
 
     private Game game;
     private Player player;
     private ArrayUnorderedList<Division> pathToExport;
 
+    /**
+     * Constructs a ManualSimulation object.
+     *
+     * @param game The main game instance containing the game state, map, and other core mechanics.
+     */
     public ManualSimulation(Game game) {
         this.game = game;
     }
 
+    /**
+     * Starts the manual simulation.
+     */
     public void start() {
 
         player = game.getPlayer();
@@ -76,7 +88,7 @@ public class ManualSimulation implements Simulation {
 
                     if (canJoinNewDivision) {
 
-                        if (!player.hasTarget()){
+                        if (!player.hasTarget()) {
                             game.showShortestPathToTarget(currentDivision);
                         } else {
                             game.showShortestPathToExit(currentDivision, startDivision);
@@ -103,13 +115,23 @@ public class ManualSimulation implements Simulation {
         exportData();
     }
 
+    /**
+     * Exports the path taken during the simulation to a JSON file.
+     * <p>
+     * The path includes divisions traversed by the player during the manual simulation
+     * and is stored in the "manualSimulation.json" file for later analysis or debugging.
+     */
     @Override
     public void exportData() {
         JSONExporter exporter = new JSONExporter("manualSimulation.json");
         exporter.missionPath(pathToExport);
     }
 
-    private void showSimulationInfo(){
+    /**
+     * Displays essential simulation information to the player.
+     * Outputs mission code, player name, and target division to the console.
+     */
+    private void showSimulationInfo() {
         System.out.println("*MANUAL SIMULATION*");
         System.out.println("Mission: " + game.getMission().getMissionCode());
         System.out.println("Player: " + game.getPlayer().getName());

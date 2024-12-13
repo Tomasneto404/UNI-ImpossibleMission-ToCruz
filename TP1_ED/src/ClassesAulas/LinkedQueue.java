@@ -48,7 +48,7 @@ public class LinkedQueue<T> implements QueueADT<T> {
     }
 
     @Override
-    public T first() throws EmptyCollectionException{
+    public T first() throws EmptyCollectionException {
         if (isEmpty()) {
             throw new EmptyCollectionException("Empty queue!");
         }
@@ -64,6 +64,7 @@ public class LinkedQueue<T> implements QueueADT<T> {
     public int size() {
         return counter;
     }
+
     @Override
     public String toString() {
         LinearNode<T> current = front;
