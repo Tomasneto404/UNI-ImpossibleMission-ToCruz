@@ -6,7 +6,6 @@ import Game.Entitys.Enemy;
 import Game.Entitys.Player;
 import Game.Exceptions.EnemiesStillAliveException;
 import Game.Exceptions.InvalidOptionException;
-import Game.Exceptions.LeaveBuildingException;
 import Game.Exceptions.NoItemsInBackpackException;
 import Game.Items.BulletProofVest;
 import Game.Items.Item;

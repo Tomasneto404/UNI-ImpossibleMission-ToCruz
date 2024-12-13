@@ -22,27 +22,27 @@ import Game.Exceptions.JSONFieldNotFoundException;
 import Game.Exceptions.DivisionNotFoundException;
 
 /**
- * Classe responsavel por importar e exportar dados dos ficheiros
+ * Class responsible for importing and exporting data from JSON files.
  */
 public class JSONImporter {
 
     private String filePath;
 
     /**
-     * Construtor da classe JSONImporter.
+     * Constructor for the JSONImporter class.
      *
-     * @param filePath Caminho do ficheiro JSON a ser lido.
+     * @param filePath Path to the JSON file to be read.
      */
     public JSONImporter(String filePath) {
         this.filePath = filePath;
     }
 
     /**
-     * Retorna o código da missão presente no ficheiro JSON.
+     * Retrieves the mission code from the JSON file.
      *
-     * @return O código da missão como uma String.
-     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
-     * @throws JSONFieldNotFoundException Caso o campo "cod-missao" não seja encontrado ou ocorra erro ao ler.
+     * @return The mission code as a String.
+     * @throws FileNotFoundException If the file cannot be found.
+     * @throws JSONFieldNotFoundException If the "cod-missao" field is missing or cannot be read.
      */
     public String getMissionCode() {
 
@@ -67,11 +67,11 @@ public class JSONImporter {
     }
 
     /**
-     * Retorna a versão do ficheiro JSON.
+     * Retrieves the version from the JSON file.
      *
-     * @return A versão como um inteiro.
-     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
-     * @throws JSONFieldNotFoundException Caso o campo "versao" não seja encontrado ou ocorra erro ao ler.
+     * @return The version as an integer.
+     * @throws FileNotFoundException If the file cannot be found.
+     * @throws JSONFieldNotFoundException If the "versao" field is missing or cannot be read.
      */
     public int getVersion() {
         JSONParser jsonParser = new JSONParser();
@@ -95,11 +95,11 @@ public class JSONImporter {
     }
 
     /**
-     * Retorna uma lista de divisões presentes no ficheiro JSON.
+     * Retrieves a list of divisions from the JSON file.
      *
-     * @return Uma lista de divisões do tipo ArrayUnorderedList.
-     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
-     * @throws JSONFieldNotFoundException Caso o campo "edificio" não seja encontrado ou ocorra erro ao ler.
+     * @return A list of divisions as an ArrayUnorderedList.
+     * @throws FileNotFoundException If the file cannot be found.
+     * @throws JSONFieldNotFoundException If the "edificio" field is missing or cannot be read.
      */
     public ArrayUnorderedList<Division> getDivisions() {
 
@@ -147,11 +147,11 @@ public class JSONImporter {
     }
 
     /**
-     * Retorna uma lista de inimigos presentes no ficheiro JSON.
+     * Retrieves a list of enemies from the JSON file.
      *
-     * @return Uma lista de inimigos do tipo ArrayUnorderedList.
-     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
-     * @throws JSONFieldNotFoundException Caso o campo "inimigos" não seja encontrado ou ocorra erro ao ler.
+     * @return A list of enemies as an ArrayUnorderedList.
+     * @throws FileNotFoundException If the file cannot be found.
+     * @throws JSONFieldNotFoundException If the "inimigos" field is missing or cannot be read.
      */
     public ArrayUnorderedList<Enemy> getEnemies() {
         ArrayUnorderedList<Enemy> listEnemies = new ArrayUnorderedList<>();
@@ -195,11 +195,11 @@ public class JSONImporter {
     }
 
     /**
-     * Retorna uma lista de divisões que são entradas ou saídas do ficheiro JSON.
+     * Retrieves a list of divisions that are entrances or exits from the JSON file.
      *
-     * @return Uma lista de divisões do tipo ArrayUnorderedList.
-     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
-     * @throws JSONFieldNotFoundException Caso o campo "entradas-saidas" não seja encontrado ou ocorra erro ao ler.
+     * @return A list of divisions as an ArrayUnorderedList.
+     * @throws FileNotFoundException If the file cannot be found.
+     * @throws JSONFieldNotFoundException If the "entradas-saidas" field is missing or cannot be read.
      */
     public ArrayUnorderedList<Division> getEntrancesExits() {
 
@@ -233,11 +233,11 @@ public class JSONImporter {
     }
 
     /**
-     * Retorna o alvo definido no ficheiro JSON.
+     * Retrieves the target specified in the JSON file.
      *
-     * @return Um objeto Target representando o alvo.
-     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
-     * @throws JSONFieldNotFoundException Caso o campo "alvo" não seja encontrado ou ocorra erro ao ler.
+     * @return A Target object representing the target.
+     * @throws FileNotFoundException If the file cannot be found.
+     * @throws JSONFieldNotFoundException If the "alvo" field is missing or cannot be read.
      */
     public Target getTarget() {
 
@@ -263,11 +263,11 @@ public class JSONImporter {
     }
 
     /**
-     * Retorna uma lista de itens presentes no ficheiro JSON.
+     * Retrieves a list of items from the JSON file.
      *
-     * @return Uma lista de itens do tipo ArrayUnorderedList.
-     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
-     * @throws JSONFieldNotFoundException Caso o campo "itens" não seja encontrado ou ocorra erro ao ler.
+     * @return A list of items as an ArrayUnorderedList.
+     * @throws FileNotFoundException If the file cannot be found.
+     * @throws JSONFieldNotFoundException If the "itens" field is missing or cannot be read.
      */
     public ArrayUnorderedList<Item> getItems() {
 
@@ -327,12 +327,12 @@ public class JSONImporter {
     }
 
     /**
-     * Gera um mapa de divisões e suas conexões com base no ficheiro JSON.
+     * Generates a map of divisions and their connections based on the JSON file.
      *
-     * @return Um objeto Map representando o mapa das divisões.
-     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
-     * @throws JSONFieldNotFoundException Caso o campo "ligacoes" não seja encontrado ou ocorra erro ao ler.
-     * @throws DivisionNotFoundException Caso uma divisão especificada na ligação não seja encontrada.
+     * @return A Map object representing the divisions and their connections.
+     * @throws FileNotFoundException If the file cannot be found.
+     * @throws JSONFieldNotFoundException If the "ligacoes" field is missing or cannot be read.
+     * @throws DivisionNotFoundException If a specified division in the connections cannot be found.
      */
     public Map<Division> generateMap() {
 
@@ -392,11 +392,12 @@ public class JSONImporter {
     }
 
     /**
-     * Encontra uma divisão pelo nome em uma lista de divisões.
+     * Generates a map of divisions and their connections based on the JSON file.
      *
-     * @param divisions Lista de divisões do tipo ArrayUnorderedList.
-     * @param name Nome da divisão a ser encontrada.
-     * @return A divisão correspondente ou null caso não seja encontrada.
+     * @return A Map object representing the divisions and their connections.
+     * @throws FileNotFoundException If the file cannot be found.
+     * @throws JSONFieldNotFoundException If the "ligacoes" field is missing or cannot be read.
+     * @throws DivisionNotFoundException If a specified division in the connections cannot be found.
      */
     private Division findDivisionByName(ArrayUnorderedList<Division> divisions, String name) {
 
@@ -414,10 +415,10 @@ public class JSONImporter {
 
 
     /**
-     * Adiciona inimigos a uma divisão específica com base no ficheiro JSON.
+     * Adds enemies to a specific division based on the JSON file.
      *
-     * @param division A divisão para a qual os inimigos devem ser adicionados.
-     * @return Uma lista de inimigos associados à divisão.
+     * @param division The division to which the enemies should be added.
+     * @return A list of enemies associated with the division.
      */
     private ArrayUnorderedList<Enemy> addEnemiesToDivision(Division division) {
 
@@ -434,10 +435,10 @@ public class JSONImporter {
     }
 
     /**
-     * Adiciona itens a uma divisão específica com base no ficheiro JSON.
+     * Adds items to a specific division based on the JSON file.
      *
-     * @param division A divisão para a qual os itens devem ser adicionados.
-     * @return Uma lista de itens associados à divisão.
+     * @param division The division to which the items should be added.
+     * @return A list of items associated with the division.
      */
     private ArrayUnorderedList<Item> addItemsToDivision(Division division) {
         ArrayUnorderedList<Item> items = getItems();
