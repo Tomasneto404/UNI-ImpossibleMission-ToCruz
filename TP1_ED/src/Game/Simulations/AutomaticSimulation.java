@@ -29,7 +29,7 @@ public class AutomaticSimulation implements Simulation {
         Map<Division> map = game.getMap();
         pathToExport = new ArrayUnorderedList<>();
 
-        Division startDivision = game.selectEntrancesExits();
+        Division startDivision= getNearestDivision(player.getDivision(), map);
         if (startDivision == null) {
             System.out.println("No starting division chosen. Exiting...");
             return;
@@ -55,13 +55,13 @@ public class AutomaticSimulation implements Simulation {
 
                 boolean scenarioCompleted = false;
 
-
+                // Loop para resolver o cenário até que todos os problemas sejam resolvidos
                 while (!scenarioCompleted) {
                     try {
                         scene.executeScenario(player, map);
-                        scenarioCompleted = true;
+                        scenarioCompleted = true;  // Caso o cenário seja resolvido com sucesso
                     } catch (EnemiesStillAliveException e) {
-                        System.out.println(e.getMessage());
+                        System.out.println("Enemies still present! Let's try again...");
                     } catch (EmptyCollectionException e) {
                         throw new RuntimeException(e);
                     }
@@ -77,22 +77,22 @@ public class AutomaticSimulation implements Simulation {
                     System.out.println("Traget captured successfully in division: " + division);
                 }
             }
-
+            //reverse path
             pathToExport.addToRear(new Division("RETURN_PATH_MARKER"));
 
-            ArrayUnorderedList<Division> reversePath = map.findShortestPath(map.getTarget().getDivision(), startDivision);
+            ArrayUnorderedList<Division> reversePath = map.findShortestPath(map.getTarget().getDivision(),startDivision);
             if (reversePath == null) {
                 System.out.println("No valid path to the target found. Exiting...");
             }
             System.out.println("Starting path back to the entrance ...");
 
-            for (Division division : reversePath) {
+            for(Division division : reversePath) {
                 player.move(division);
                 pathToExport.addToRear(division);
 
-                System.out.println("Returning to : " + division);
+                System.out.println("Returning to : "+ division);
 
-                if (!player.isAlive()) {
+                if(!player.isAlive()) {
                     throw new DeadPlayerException(player.getName() + "died during the scape!");
                 }
             }
@@ -102,6 +102,25 @@ public class AutomaticSimulation implements Simulation {
         }
 
         exportData();
+    }
+
+    private Division getNearestDivision(Division currentDivision, Map<Division> map) {
+        Division nearestDivision = null;
+        int minDistance = Integer.MAX_VALUE;
+
+        ArrayUnorderedList<Division> divisions=map.getDivisions();
+        int index=0;
+
+        for (Division division : map.getDivisions() ) {
+            if(division!=currentDivision) {
+                int distance=index++;
+                if(distance<minDistance) {
+                    minDistance=distance;
+                    nearestDivision=division;
+                }
+            }
+        }
+        return nearestDivision;
     }
 
     @Override

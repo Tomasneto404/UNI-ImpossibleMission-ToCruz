@@ -29,16 +29,20 @@ public class JSONImporter {
     private String filePath;
 
     /**
-     * Metodo construtor
+     * Construtor da classe JSONImporter.
+     *
+     * @param filePath Caminho do ficheiro JSON a ser lido.
      */
     public JSONImporter(String filePath) {
         this.filePath = filePath;
     }
 
     /**
-     * Metodo para retornar o codigo da missao
+     * Retorna o código da missão presente no ficheiro JSON.
      *
-     * @return
+     * @return O código da missão como uma String.
+     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
+     * @throws JSONFieldNotFoundException Caso o campo "cod-missao" não seja encontrado ou ocorra erro ao ler.
      */
     public String getMissionCode() {
 
@@ -63,9 +67,11 @@ public class JSONImporter {
     }
 
     /**
-     * Metodo para retornar a Versao no ficheiro json
+     * Retorna a versão do ficheiro JSON.
      *
-     * @return
+     * @return A versão como um inteiro.
+     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
+     * @throws JSONFieldNotFoundException Caso o campo "versao" não seja encontrado ou ocorra erro ao ler.
      */
     public int getVersion() {
         JSONParser jsonParser = new JSONParser();
@@ -89,9 +95,11 @@ public class JSONImporter {
     }
 
     /**
-     * Metodo para retornar Divisoes do ficheiro
+     * Retorna uma lista de divisões presentes no ficheiro JSON.
      *
-     * @return
+     * @return Uma lista de divisões do tipo ArrayUnorderedList.
+     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
+     * @throws JSONFieldNotFoundException Caso o campo "edificio" não seja encontrado ou ocorra erro ao ler.
      */
     public ArrayUnorderedList<Division> getDivisions() {
 
@@ -139,9 +147,11 @@ public class JSONImporter {
     }
 
     /**
-     * Metodo para retornar inimigos do ficheiro .json
+     * Retorna uma lista de inimigos presentes no ficheiro JSON.
      *
-     * @return listEnemies List of enemies
+     * @return Uma lista de inimigos do tipo ArrayUnorderedList.
+     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
+     * @throws JSONFieldNotFoundException Caso o campo "inimigos" não seja encontrado ou ocorra erro ao ler.
      */
     public ArrayUnorderedList<Enemy> getEnemies() {
         ArrayUnorderedList<Enemy> listEnemies = new ArrayUnorderedList<>();
@@ -185,9 +195,11 @@ public class JSONImporter {
     }
 
     /**
-     * Metodo para retornar Divisoes que sao entradas ou saidas do ficheiro
+     * Retorna uma lista de divisões que são entradas ou saídas do ficheiro JSON.
      *
-     * @return listDivisions
+     * @return Uma lista de divisões do tipo ArrayUnorderedList.
+     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
+     * @throws JSONFieldNotFoundException Caso o campo "entradas-saidas" não seja encontrado ou ocorra erro ao ler.
      */
     public ArrayUnorderedList<Division> getEntrancesExits() {
 
@@ -221,9 +233,11 @@ public class JSONImporter {
     }
 
     /**
-     * Metodo responsavel por ler e retornar informação do Alvo
+     * Retorna o alvo definido no ficheiro JSON.
      *
-     * @return
+     * @return Um objeto Target representando o alvo.
+     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
+     * @throws JSONFieldNotFoundException Caso o campo "alvo" não seja encontrado ou ocorra erro ao ler.
      */
     public Target getTarget() {
 
@@ -249,9 +263,11 @@ public class JSONImporter {
     }
 
     /**
-     * Metodo responsavel por ler e retornar informação dos items
+     * Retorna uma lista de itens presentes no ficheiro JSON.
      *
-     * @return
+     * @return Uma lista de itens do tipo ArrayUnorderedList.
+     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
+     * @throws JSONFieldNotFoundException Caso o campo "itens" não seja encontrado ou ocorra erro ao ler.
      */
     public ArrayUnorderedList<Item> getItems() {
 
@@ -310,6 +326,14 @@ public class JSONImporter {
         return listItems;
     }
 
+    /**
+     * Gera um mapa de divisões e suas conexões com base no ficheiro JSON.
+     *
+     * @return Um objeto Map representando o mapa das divisões.
+     * @throws FileNotFoundException Caso o ficheiro não seja encontrado.
+     * @throws JSONFieldNotFoundException Caso o campo "ligacoes" não seja encontrado ou ocorra erro ao ler.
+     * @throws DivisionNotFoundException Caso uma divisão especificada na ligação não seja encontrada.
+     */
     public Map<Division> generateMap() {
 
         Map<Division> tmpMap = new Map<Division>();
@@ -367,6 +391,13 @@ public class JSONImporter {
         return tmpMap;
     }
 
+    /**
+     * Encontra uma divisão pelo nome em uma lista de divisões.
+     *
+     * @param divisions Lista de divisões do tipo ArrayUnorderedList.
+     * @param name Nome da divisão a ser encontrada.
+     * @return A divisão correspondente ou null caso não seja encontrada.
+     */
     private Division findDivisionByName(ArrayUnorderedList<Division> divisions, String name) {
 
         for (Division division : divisions) {
@@ -381,6 +412,13 @@ public class JSONImporter {
 
     }
 
+
+    /**
+     * Adiciona inimigos a uma divisão específica com base no ficheiro JSON.
+     *
+     * @param division A divisão para a qual os inimigos devem ser adicionados.
+     * @return Uma lista de inimigos associados à divisão.
+     */
     private ArrayUnorderedList<Enemy> addEnemiesToDivision(Division division) {
 
         ArrayUnorderedList<Enemy> enemies = getEnemies();
@@ -395,6 +433,12 @@ public class JSONImporter {
         return tmpEnemies;
     }
 
+    /**
+     * Adiciona itens a uma divisão específica com base no ficheiro JSON.
+     *
+     * @param division A divisão para a qual os itens devem ser adicionados.
+     * @return Uma lista de itens associados à divisão.
+     */
     private ArrayUnorderedList<Item> addItemsToDivision(Division division) {
         ArrayUnorderedList<Item> items = getItems();
         ArrayUnorderedList<Item> tmpItems = new ArrayUnorderedList<>();
