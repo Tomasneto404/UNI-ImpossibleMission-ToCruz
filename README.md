@@ -1,2 +1,3 @@
 # TrabalhoED_Novo
-2º Ano
+
+Para o correto funcionamento deste trabalho é necessário ter a biblioteca JSONsimple (json-simple-1.1.1.jar) instalada 
