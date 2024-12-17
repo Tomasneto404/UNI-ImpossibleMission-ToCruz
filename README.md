@@ -8,7 +8,8 @@ No âmbito da Unidade Curricular de Estruturas de Dados (ED) do curso de Licenci
 -> Graph <br>
 -> Queue <br>
 -> Stack <br>
-Cumprindo sempre as regras básicas da Programação Orientada a Objetos (POO): <br>
+-> Entre muitas outras ... <br> <br>
+Cumprindo sempre as regras básicas da Programação Orientada a Objetos (POO): <br> <br>
 -> Abstração <br>
 -> Encapsulamento <br>
 -> Herança <br>
